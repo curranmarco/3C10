@@ -16,3 +16,8 @@ _Features:_
   - Display:
       - Show name of sample
       - Have a separate button to change in between sounds (this is what we would see on the display)
+
+_Current Challenges:_
+  - Need to eliminate noise between sounds
+      - Hardware -> Noise Gate?
+      - Software -> Still getting interference when setting signal to 0 (Noise from DAC?)
