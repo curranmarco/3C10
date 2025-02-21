@@ -2,9 +2,9 @@
 
 _Features:_
   - Able to synthesise multiple sounds using functions on Pico -> DAC -> speaker
-      Downloading sounds from online as arrays
-      Converting to arrays and sending through Pico to DAC
-      Signal amplified before being sent to speaker
+      - Downloading sounds from online as arrays
+      - Converting to arrays and sending through Pico to DAC
+      - Signal amplified before being sent to speaker
   - Able to create samples:
       Button to start sample
       Makes note of time when buttons are pressed for each sound
