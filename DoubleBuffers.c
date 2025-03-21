@@ -6,9 +6,9 @@
 // Define constants for buffer size and SPI settings
 #define BUFFER_SIZE 64       // Number of audio samples per buffer
 #define SPI_PORT spi0        // Use SPI0 for communication
-#define SPI_SCK 2            // SPI clock pin (SCK)
-#define SPI_MOSI 3           // SPI data pin (MOSI)
-#define SPI_CS 5             // Chip select pin for DAC
+#define SPI_SCK 18            // SPI clock pin (SCK)
+#define SPI_MOSI 19           // SPI data pin (MOSI)
+#define SPI_CS 17             // Chip select pin for DAC
 
 // Declare double buffers (to store audio samples)
 uint16_t buffer_A[BUFFER_SIZE];  // First buffer (active)
@@ -18,6 +18,8 @@ volatile bool buffer_A_active = true;  // Track which buffer is active
 // Declare DMA variables
 int dma_channel;                // DMA channel number
 dma_channel_config dma_config;   // DMA configuration struct
+
+uint16_t dac_value = 0;
 
 // -----------------------------------------
 // Function to Initialize SPI for DAC
@@ -126,3 +128,28 @@ int main() {
         tight_loop_contents();  // Main loop does nothing (DMA handles everything)
     }
 }
+
+// ----------------------------------------
+// Audio Sample Generation
+// ----------------------------------------
+unit16_t get_next_audio_sample() {
+    dac_value += 100;
+
+    if (dac_value >= 3900) dac_value = 0;
+    
+    // Build the 16-bit command word for MCP4922.
+    // Command word format:
+    //   Bit 15: Channel Select (0 = Channel A)
+    //   Bit 14: Buffer bit (1 = Buffered)
+    //   Bit 13: Gain (1 = 1×, i.e., Vout = (DAC/4095)*Vref)
+    //   Bit 12: Shutdown (1 = Active mode)
+    //   Bits 11-0: 12-bit DAC value.
+    uint16_t command = (0 << 15)     // Channel A
+        | (1 << 14)     // Buffered output
+        | (1 << 13)     // Gain = 1× (Vref)
+        | (1 << 12)     // Active mode (not shutdown)
+        | (dac_value & 0x0FFF); // 12-bit data
+
+    return command;
+}
+
