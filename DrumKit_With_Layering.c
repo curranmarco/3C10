@@ -79,6 +79,12 @@ volatile int hihat_position = -1;
 //     - 12 bit input signal is converted to 16 bit DAC command line to be written into buffer
 
 // -----------------------------------------
+// ISSUES
+// Can't layer the same sound
+// Need struct for sounds playing to add to sample
+// Can switch to C++ to use OOP
+
+// -----------------------------------------
 // Function to Initialize SPI for DAC
 // -----------------------------------------
 void spi_init_dac() {
