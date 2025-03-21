@@ -231,6 +231,8 @@ unit16_t get_next_audio_sample() {
         | (1 << 13)     // Gain = 1× (Vref)
         | (1 << 12)     // Active mode (not shutdown)
         | (dac_value & 0x0FFF); // 12-bit data
+
+    return command;
 }
 
 // -----------------------------------------
