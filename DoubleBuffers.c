@@ -133,7 +133,7 @@ int main() {
 // Audio Sample Generation
 // ----------------------------------------
 unit16_t get_next_audio_sample() {
-    dac_value += 100;
+    dac_value += 10;
 
     if (dac_value >= 3900) dac_value = 0;
     
