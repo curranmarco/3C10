@@ -1,68 +1,33 @@
-# Generated Cmake Pico project file
+cmake_minimum_required(VERSION 3.12)
 
-cmake_minimum_required(VERSION 3.13)
+# Set the path to the Pico SDK
+set(PICO_SDK_PATH "C:/Users/eogha/oled-test/pico-sdk")
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Initialise pico_sdk from installed location
-# (note this can come from environment, CMake cache etc)
-
-# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 2.1.1)
-set(toolchainVersion 14_2_Rel1)
-set(picotoolVersion 2.1.1)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
-# ====================================================================================
-set(PICO_BOARD pico2_w CACHE STRING "Board type")
-
-# Pull in Raspberry Pi Pico SDK (must be before project)
+# Initialize the Pico SDK
 include(pico_sdk_import.cmake)
 
-project(pico-drum-kit C CXX ASM)
+project(oled_test C CXX ASM)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
-# Initialise the Raspberry Pi Pico SDK
+
 pico_sdk_init()
 
-# Add executable. Default name is the project name, version 0.1
-
-add_executable(pico-drum-kit src/main.cpp src/configs.hpp src/piezo.cpp src/audio.cpp src/kick.hpp src/snare.hpp)
-
-pico_set_program_name(pico-drum-kit "pico-drum-kit")
-pico_set_program_version(pico-drum-kit "0.1")
-
-# Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(pico-drum-kit 0)
-pico_enable_stdio_usb(pico-drum-kit 1)
-
-# Add the standard library to the build
-target_link_libraries(pico-drum-kit
-        pico_stdlib)
-
-# Add the standard include files to the build
-target_include_directories(pico-drum-kit PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
+add_executable(oled_test
+    oled_test.cpp
 )
 
-# Add any user requested libraries
-target_link_libraries(pico-drum-kit 
-        hardware_spi
-        hardware_i2c
-        hardware_dma
-        hardware_timer
-        hardware_clocks
-        hardware_adc
-        hardware_pwm
-        )
+# Add pico_stdlib library which aggregates commonly used features
+target_link_libraries(oled_test 
+    pico_stdlib
+    hardware_spi
+    hardware_gpio
+    pico_binary_info
+)
 
-pico_add_extra_outputs(pico-drum-kit)
+# Enable USB output, disable UART output
+pico_enable_stdio_usb(oled_test 1)
+pico_enable_stdio_uart(oled_test 0)
 
+# Create map/bin/hex/uf2 file in addition to ELF file
+pico_add_extra_outputs(oled_test)
